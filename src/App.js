@@ -1,7 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
+  // const giphyApiKey = "tla48KisoBfXSlcpuWaFNzvKs85sjMp0";
+
   return (
     <div className="App">
       <header className="App-header">
