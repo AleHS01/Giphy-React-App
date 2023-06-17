@@ -8,11 +8,11 @@ const GifCard = (props) => {
       rel="noreferrer"
     >
       <div className="video-container">
-        {/* <img
+        <img
           src={props.imageSrc}
           alt={props.title}
           className="gif-card-image"
-        /> */}
+        />
         <video
           autoPlay
           loop

@@ -72,6 +72,20 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
+  opacity: 100%;
+  transition: opacity 0.5s ease-in-out;
+}
+.gif-card .gif-card-video {
+  opacity: 0;
+  display: none;
+}
+.gif-card:hover .gif-card-image {
+  opacity: 0;
+  display: none;
+}
+.gif-card:hover .gif-card-video {
+  opacity: 100%;
+  display: block;
 }
 
 .gif-card-title {

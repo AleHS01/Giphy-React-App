@@ -19,7 +19,7 @@ function App() {
       const list = await axios.get(trendingURl);
 
       setTrandingGifsListState(list.data.data);
-      console.log(list.data.data[0]);
+      console.log(list.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -28,11 +28,12 @@ function App() {
   const searchGif = async (termToSearch) => {
     const formattedTermToSearch = encodeURIComponent(termToSearch);
 
+    // const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&limit=52&api_key=${giphyApiKey}`;
     const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&api_key=${giphyApiKey}`;
 
     try {
       const list = await axios.get(searchUrl);
-      console.log(list.data.data[0]);
+      console.log(list.data.data);
       setSearchGifsListState(list.data.data);
     } catch (error) {
       console.log(error);
@@ -60,6 +61,7 @@ function App() {
         {searchGifsList.map((searchGifs) => {
           return (
             <GifCard
+              imageSrc={searchGifs.images["480w_still"].url}
               gifUrl={searchGifs.url}
               title={searchGifs.title}
               videoSrc={searchGifs.images.preview.mp4}
