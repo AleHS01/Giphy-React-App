@@ -1,5 +1,3 @@
-import React, { Component } from "react";
-
 const GifCard = (props) => {
   console.log(props.videoSrc);
   return (
