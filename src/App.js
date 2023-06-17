@@ -12,14 +12,23 @@ function App() {
   // useState variables
   const [searchGifsList, setSearchGifsListState] = useState([]);
   const [trandingGifsList, setTrandingGifsListState] = useState([]);
-  const [randomGifsList, setRandomGifsListState] = useState([]);
+  const [randomGif, setRandomGifState] = useState({});
 
   const trendingGiphy = async () => {
     try {
       const list = await axios.get(trendingURl);
 
       setTrandingGifsListState(list.data.data);
-      console.log(list.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const randomGiphy = async () => {
+    try {
+      const gif = await axios.get(randomURL);
+
+      setRandomGifState(gif.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -33,7 +42,6 @@ function App() {
 
     try {
       const list = await axios.get(searchUrl);
-      console.log(list.data.data);
       setSearchGifsListState(list.data.data);
     } catch (error) {
       console.log(error);
@@ -44,6 +52,7 @@ function App() {
     <div className="App">
       <button onClick={trendingGiphy}>Trending</button>
       <button onClick={searchGif}>Search</button>
+      <button onClick={randomGiphy}>Random</button>
       {/* <div className="gifs-containter">
         {trandingGifsList.map((trandingGif) => {
           return (
@@ -56,7 +65,7 @@ function App() {
           );
         })}
       </div> */}
-      <SearchField searchGif={searchGif} />
+      {/* <SearchField searchGif={searchGif} />
       <div className="gifs-containter">
         {searchGifsList.map((searchGifs) => {
           return (
@@ -69,7 +78,16 @@ function App() {
             />
           );
         })}
-      </div>
+      </div> */}
+      {/* <div className="gifs-containter">
+        <GifCard
+          imageSrc={randomGif.images["480w_still"].url}
+          gifUrl={randomGif.url}
+          title={randomGif.title}
+          videoSrc={randomGif.images.preview.mp4}
+          //imageSrc={trandingGif.images.preview_gif.url}
+        />
+      </div> */}
     </div>
   );
 }
