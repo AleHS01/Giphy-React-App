@@ -8,13 +8,14 @@ function App() {
   const giphyApiKey = "tla48KisoBfXSlcpuWaFNzvKs85sjMp0";
   const trendingURl = `http://api.giphy.com/v1/gifs/trending?api_key=${giphyApiKey}`;
   const randomURL = `http://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}`;
-  const categoryURL = `http://api.giphy.com/v1/categories?api_key=${giphyApiKey}`;
 
   // useState variables
   const [searchGifsList, setSearchGifsListState] = useState([]);
   const [trandingGifsList, setTrandingGifsListState] = useState([]);
   const [randomGif, setRandomGifState] = useState({});
-  const [filteringCategory, setFilteringCategory] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const trendingGiphy = async () => {
     try {
@@ -42,9 +43,9 @@ function App() {
   };
 
   const searchGif = async (termToSearch) => {
+    setSearchTerm(termToSearch); //this is just to be save in case the user wants to filter results by language, and the api can be call again
     const formattedTermToSearch = encodeURIComponent(termToSearch);
-
-    const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&api_key=${giphyApiKey}`;
+    const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}`;
 
     try {
       const list = await axios.get(searchUrl);
@@ -62,7 +63,13 @@ function App() {
   }, []);
 
   const handleDropdownCategory = (event) => {
+    setSelectedCategory(event.target.value);
     searchGif(event.target.value);
+  };
+
+  const handleDropdownLanguage = (event) => {
+    setSelectedLanguage(event.target.value);
+    searchGif(searchTerm);
   };
 
   return (
@@ -71,8 +78,8 @@ function App() {
       {/* <button onClick={searchGif}>Search</button> */}
       <button onClick={randomGiphy}>Random</button>
       <SearchField searchGif={searchGif} />
-      <select value="" onChange={handleDropdownCategory}>
-        <option value="">Select A Category</option>
+      <select value={selectedCategory} onChange={handleDropdownCategory}>
+        <option value="what are you doing here">Select A Category</option>
         <option value="love">Love</option>
         <option value="funny">Funny</option>
         <option value="food">Food</option>
@@ -85,6 +92,18 @@ function App() {
         <option value="science">Science</option>
         <option value="dance">Dance</option>
         <option value="phrases">Phrases</option>
+      </select>
+      <select value={selectedLanguage} onChange={handleDropdownLanguage}>
+        {/* <option value="en">Filter by Language</option> */}
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="pt">Portuguese</option>
+        <option value="ar">Arabic</option>
+        <option value="it">Italian</option>
+        <option value="ja">Japanese</option>
+        <option value="zh-CN">Chinese</option>
+        <option value="hi">Hindi</option>
       </select>
       {/* {renderGifInUI()} */}
 
