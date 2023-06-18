@@ -8,16 +8,17 @@ function App() {
   const giphyApiKey = "tla48KisoBfXSlcpuWaFNzvKs85sjMp0";
   const trendingURl = `http://api.giphy.com/v1/gifs/trending?api_key=${giphyApiKey}`;
   const randomURL = `http://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}`;
+  const categoryURL = `http://api.giphy.com/v1/categories?api_key=${giphyApiKey}`;
 
   // useState variables
   const [searchGifsList, setSearchGifsListState] = useState([]);
   const [trandingGifsList, setTrandingGifsListState] = useState([]);
   const [randomGif, setRandomGifState] = useState({});
+  const [filteringCategory, setFilteringCategory] = useState({});
 
   const trendingGiphy = async () => {
     try {
       const list = await axios.get(trendingURl);
-
       setTrandingGifsListState(list.data.data);
 
       setRandomGifState({});
@@ -60,12 +61,31 @@ function App() {
     trendingGiphy();
   }, []);
 
+  const handleDropdownCategory = (event) => {
+    searchGif(event.target.value);
+  };
+
   return (
     <div className="App">
       <button onClick={trendingGiphy}>Trending</button>
       {/* <button onClick={searchGif}>Search</button> */}
       <button onClick={randomGiphy}>Random</button>
       <SearchField searchGif={searchGif} />
+      <select value="" onChange={handleDropdownCategory}>
+        <option value="">Select A Category</option>
+        <option value="love">Love</option>
+        <option value="funny">Funny</option>
+        <option value="food">Food</option>
+        <option value="animals">Animal</option>
+        <option value="sport">Sport</option>
+        <option value="gaming">Gaming</option>
+        <option value="memes">Memes</option>
+        <option value="travel">Travel</option>
+        <option value="cartoons">Cartoons</option>
+        <option value="science">Science</option>
+        <option value="dance">Dance</option>
+        <option value="phrases">Phrases</option>
+      </select>
       {/* {renderGifInUI()} */}
 
       {/* Rendering a list of  trending Gif if we get null or undefined nothings happends 
@@ -76,6 +96,7 @@ function App() {
           {trandingGifsList.map((trandingGif) => {
             return (
               <GifCard
+                key={trandingGifsList.id}
                 gifUrl={trandingGif.url}
                 title={trandingGif.title}
                 videoSrc={trandingGif.images.preview.mp4}
@@ -93,6 +114,7 @@ function App() {
           {searchGifsList.map((searchGifs) => {
             return (
               <GifCard
+                key={searchGifs.id}
                 imageSrc={searchGifs.images["480w_still"].url}
                 gifUrl={searchGifs.url}
                 title={searchGifs.title}
