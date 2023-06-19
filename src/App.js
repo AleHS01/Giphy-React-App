@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import GifCard from "./components/GifCard";
 import SearchField from "./components/SearchField";
 import GifCardPlaceholder from "./components/GifCardPlaceholder";
+import Paginantion from "./components/Paginantion";
 import axios from "axios";
 
 function App() {
@@ -18,13 +19,19 @@ function App() {
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [gifPerPage, setGifPerPage] = useState(28);
+  const [currentItems, setCurrentItems] = useState([]);
+
+  //const lastGifIndex = currentPage * gifPerPage;
+  //const firstGifIndex = lastGifIndex - gifPerPage;
 
   const trendingGiphy = async () => {
     setIsLoading(true);
     try {
       const list = await axios.get(trendingURl);
       setTrandingGifsListState(list.data.data);
-
+      //currentGifsList(); //update the gif that will be display per page
       setRandomGifState({});
       setSearchGifsListState([]);
       setTimeout(() => {
@@ -43,6 +50,7 @@ function App() {
       setRandomGifState(gif.data.data);
       setSearchGifsListState([]);
       setTrandingGifsListState([]);
+      setCurrentItems([]);
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -61,6 +69,7 @@ function App() {
       const list = await axios.get(searchUrl);
       console.log(list);
       setSearchGifsListState(list.data.data);
+      //currentGifsList(); //update the gif that will be display per page
       setTrandingGifsListState([]);
       setRandomGifState({});
       setTimeout(() => {
@@ -73,6 +82,7 @@ function App() {
 
   useEffect(() => {
     trendingGiphy();
+    //currentGifsList();
   }, []);
 
   const handleDropdownCategory = (event) => {
@@ -84,6 +94,33 @@ function App() {
     setSelectedLanguage(event.target.value);
     searchGif(searchTerm);
   };
+
+  const totalItemsCount = () => {
+    if (trandingGifsList.length > 0) {
+      return trandingGifsList.length;
+    } else if (searchGifsList.length > 0) {
+      return searchGifsList.length;
+    } else {
+      return 1;
+    }
+  };
+
+  const pageSelected = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    const lastGifIndex = currentPage * gifPerPage;
+    const firstGifIndex = lastGifIndex - gifPerPage;
+
+    if (trandingGifsList.length > 0 && searchGifsList.length === 0) {
+      setCurrentItems(trandingGifsList.slice(firstGifIndex, lastGifIndex));
+    } else if (searchGifsList.length > 0 && trandingGifsList.length === 0) {
+      setCurrentItems(searchGifsList.slice(firstGifIndex, lastGifIndex));
+    } else {
+      setCurrentItems([]);
+    }
+  }, [currentPage, searchGifsList, trandingGifsList]);
 
   if (isLoading) {
     const GifPlaceHolders = [];
@@ -127,6 +164,12 @@ function App() {
           <option value="zh-CN">Chinese</option>
           <option value="hi">Hindi</option>
         </select>
+        <Paginantion
+          currentPage={currentPage}
+          gifPerPage={gifPerPage}
+          totalItems={totalItemsCount()}
+          pageSelected={pageSelected}
+        />
         <div className="gifs-containter">{GifPlaceHolders}</div>
       </div>
     );
@@ -164,12 +207,31 @@ function App() {
         <option value="zh-CN">Chinese</option>
         <option value="hi">Hindi</option>
       </select>
-      {/* {renderGifInUI()} */}
-
+      <Paginantion
+        currentPage={currentPage}
+        gifPerPage={gifPerPage}
+        totalItems={totalItemsCount()}
+        pageSelected={pageSelected}
+      />
+      {currentItems.length > 0 && (
+        <div className="gifs-containter">
+          {currentItems.map((gif) => {
+            return (
+              <GifCard
+                key={gif.id}
+                gifUrl={gif.url}
+                title={gif.title}
+                videoSrc={gif.images.preview.mp4}
+                imageSrc={gif.images["480w_still"].url}
+              />
+            );
+          })}
+        </div>
+      )}
       {/* Rendering a list of  trending Gif if we get null or undefined nothings happends 
       else if we get an object or anything else we can render the component with the data from the api and the list*/}
 
-      {trandingGifsList.length > 0 && (
+      {/* {trandingGifsList.length > 0 && (
         <div className="gifs-containter">
           {trandingGifsList.map((trandingGif) => {
             return (
@@ -183,11 +245,11 @@ function App() {
             );
           })}
         </div>
-      )}
+      )} */}
 
       {/* Rendering a list of  search Gif if we get null or undefined nothings happends 
       else if we get an object or anything else we can render the component with the data from the api and the list*/}
-      {searchGifsList.length > 0 && (
+      {/* {searchGifsList.length > 0 && (
         <div className="gifs-containter">
           {searchGifsList.map((searchGifs) => {
             return (
@@ -202,7 +264,7 @@ function App() {
             );
           })}
         </div>
-      )}
+      )} */}
 
       {/* Rendering single Random Gif if we get null or undefined nothings happends 
       else if we get a string or anything else we can render the component with the data from the api */}
