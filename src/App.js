@@ -8,7 +8,7 @@ import axios from "axios";
 
 function App() {
   const giphyApiKey = "tla48KisoBfXSlcpuWaFNzvKs85sjMp0";
-  const trendingURl = `http://api.giphy.com/v1/gifs/trending?api_key=${giphyApiKey}&limit=112`;
+  const trendingURl = `http://api.giphy.com/v1/gifs/trending?api_key=${giphyApiKey}&limit=50`;
   const randomURL = `http://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}`;
 
   // useState variables
@@ -23,19 +23,51 @@ function App() {
   const [gifPerPage, setGifPerPage] = useState(28);
   const [currentItems, setCurrentItems] = useState([]);
 
+  // const juan = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const list = await axios.get(trendingURl);
+  //     setTrandingGifsListState(list.data.data);
+  //     //currentGifsList(); //update the gif that will be display per page
+  //     setRandomGifState({});
+  //     setSearchGifsListState([]);
+  //     setSelectedCategory("");
+  //     setTimeout(() => {
+  //       setIsLoading(false);
+  //     }, 2000);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const trendingGiphy = async () => {
     setIsLoading(true);
     try {
-      const list = await axios.get(trendingURl);
-      setTrandingGifsListState(list.data.data);
-      //currentGifsList(); //update the gif that will be display per page
+      let offset = 0;
+      let gifs = [];
+
+      while (gifs.length < 112) {
+        const response = await axios.get(`${trendingURl}&offset=${offset}`);
+        const data = response.data.data;
+        gifs = gifs.concat(data);
+        offset += 50;
+
+        if (data.length < 50) {
+          // Break the loop if there are no more GIFs
+          break;
+        }
+      }
+
+      setTrandingGifsListState(gifs.slice(0, 112));
       setRandomGifState({});
       setSearchGifsListState([]);
+      setSelectedCategory("");
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -48,6 +80,7 @@ function App() {
       setSearchGifsListState([]);
       setTrandingGifsListState([]);
       setCurrentItems([]);
+      setSelectedCategory("");
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -56,24 +89,58 @@ function App() {
     }
   };
 
+  // const searchGif = async (termToSearch) => {
+  //   setSearchTerm(termToSearch); //this is just to be save in case the user wants to filter results by language, and the api can be call again
+  //   const formattedTermToSearch = encodeURIComponent(termToSearch);
+  //   const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}&limit=112`;
+
+  //   setIsLoading(true);
+  //   try {
+  //     const list = await axios.get(searchUrl);
+  //     console.log(list);
+  //     setSearchGifsListState(list.data.data);
+  //     //currentGifsList(); //update the gif that will be display per page
+  //     setTrandingGifsListState([]);
+  //     setRandomGifState({});
+  //     setTimeout(() => {
+  //       setIsLoading(false);
+  //     }, 2000);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const searchGif = async (termToSearch) => {
     setSearchTerm(termToSearch); //this is just to be save in case the user wants to filter results by language, and the api can be call again
     const formattedTermToSearch = encodeURIComponent(termToSearch);
-    const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}&limit=112`;
+    const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}&limit=50`;
 
     setIsLoading(true);
     try {
-      const list = await axios.get(searchUrl);
-      console.log(list);
-      setSearchGifsListState(list.data.data);
-      //currentGifsList(); //update the gif that will be display per page
+      let offset = 0;
+      let gifs = [];
+
+      while (gifs.length < 112) {
+        const response = await axios.get(`${searchUrl}&offset=${offset}`);
+        const data = response.data.data;
+        gifs = gifs.concat(data);
+        offset += 50;
+
+        if (data.length < 50) {
+          // Break the loop if there are no more GIFs
+          break;
+        }
+      }
+
+      setSearchGifsListState(gifs.slice(0, 112));
       setTrandingGifsListState([]);
       setRandomGifState({});
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setIsLoading(false);
     }
   };
 
