@@ -87,8 +87,12 @@ function App() {
 
   if (isLoading) {
     const GifPlaceHolders = [];
-    for (let i = 0; i < 54; i++) {
+    if (randomGif.url) {
       GifPlaceHolders.push(<GifCardPlaceholder />);
+    } else {
+      for (let i = 0; i < 52; i++) {
+        GifPlaceHolders.push(<GifCardPlaceholder />);
+      }
     }
 
     return (
