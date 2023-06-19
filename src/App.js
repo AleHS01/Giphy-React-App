@@ -16,27 +16,35 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const trendingGiphy = async () => {
+    setIsLoading(true);
     try {
       const list = await axios.get(trendingURl);
       setTrandingGifsListState(list.data.data);
 
       setRandomGifState({});
       setSearchGifsListState([]);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
       console.error(error);
     }
   };
 
   const randomGiphy = async () => {
+    setIsLoading(true);
     try {
       const gif = await axios.get(randomURL);
 
       setRandomGifState(gif.data.data);
-
       setSearchGifsListState([]);
       setTrandingGifsListState([]);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
       console.error(error);
     }
@@ -47,12 +55,16 @@ function App() {
     const formattedTermToSearch = encodeURIComponent(termToSearch);
     const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}`;
 
+    setIsLoading(true);
     try {
       const list = await axios.get(searchUrl);
-
+      console.log(list);
       setSearchGifsListState(list.data.data);
       setTrandingGifsListState([]);
       setRandomGifState({});
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
@@ -72,10 +84,51 @@ function App() {
     searchGif(searchTerm);
   };
 
+  if (isLoading) {
+    const GifPlaceHolders = [];
+    for (let i = 0; i < 54; i++) {
+      GifPlaceHolders.push(<GifCard />);
+    }
+
+    return (
+      <div className="App">
+        <button onClick={trendingGiphy}>Trending</button>
+        <button onClick={randomGiphy}>Random</button>
+        <SearchField searchGif={searchGif} />
+        <select value={selectedCategory} onChange={handleDropdownCategory}>
+          <option value="what are you doing here">Select A Category</option>
+          <option value="love">Love</option>
+          <option value="funny">Funny</option>
+          <option value="food">Food</option>
+          <option value="animals">Animal</option>
+          <option value="sport">Sport</option>
+          <option value="gaming">Gaming</option>
+          <option value="memes">Memes</option>
+          <option value="travel">Travel</option>
+          <option value="cartoons">Cartoons</option>
+          <option value="science">Science</option>
+          <option value="dance">Dance</option>
+          <option value="phrases">Phrases</option>
+        </select>
+        <select value={selectedLanguage} onChange={handleDropdownLanguage}>
+          {/* <option value="en">Filter by Language</option> */}
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="pt">Portuguese</option>
+          <option value="ar">Arabic</option>
+          <option value="it">Italian</option>
+          <option value="ja">Japanese</option>
+          <option value="zh-CN">Chinese</option>
+          <option value="hi">Hindi</option>
+        </select>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       <button onClick={trendingGiphy}>Trending</button>
-      {/* <button onClick={searchGif}>Search</button> */}
       <button onClick={randomGiphy}>Random</button>
       <SearchField searchGif={searchGif} />
       <select value={selectedCategory} onChange={handleDropdownCategory}>
