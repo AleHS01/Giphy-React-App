@@ -2,6 +2,7 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import GifCard from "./components/GifCard";
 import SearchField from "./components/SearchField";
+import GifCardPlaceholder from "./components/GifCardPlaceholder";
 import axios from "axios";
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
       setSearchGifsListState([]);
       setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.error(error);
     }
@@ -44,7 +45,7 @@ function App() {
       setTrandingGifsListState([]);
       setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.error(error);
     }
@@ -64,7 +65,7 @@ function App() {
       setRandomGifState({});
       setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +88,7 @@ function App() {
   if (isLoading) {
     const GifPlaceHolders = [];
     for (let i = 0; i < 54; i++) {
-      GifPlaceHolders.push(<GifCard />);
+      GifPlaceHolders.push(<GifCardPlaceholder />);
     }
 
     return (
@@ -122,6 +123,7 @@ function App() {
           <option value="zh-CN">Chinese</option>
           <option value="hi">Hindi</option>
         </select>
+        <div className="gifs-containter">{GifPlaceHolders}</div>
       </div>
     );
   }

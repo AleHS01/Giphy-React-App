@@ -101,3 +101,44 @@
   text-overflow: ellipsis;
   line-height: 30px;
 }
+
+/* Placeholer for loading */
+.gif-card-placeholder {
+  height: 280px;
+  width: 250px;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #282c34;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-gradient {
+  height: 90%;
+  width: 100%;
+  background: linear-gradient(90deg, #282c34 25%, #373c47 37%, #282c34 63%);
+  background-size: 200% 200%;
+  animation: loading-gradient-animation 1.5s linear infinite;
+}
+
+@keyframes loading-gradient-animation {
+  0% {
+    background-position: -100% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.placeholder-title {
+  width: 80%;
+  height: 16px;
+  background: linear-gradient(90deg, #282c34 25%, #373c47 37%, #282c34 63%);
+  background-size: 200% 200%;
+  animation: loading-gradient-animation 1.5s linear infinite;
+  margin-top: 8px;
+}
