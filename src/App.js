@@ -8,7 +8,7 @@ import axios from "axios";
 
 function App() {
   const giphyApiKey = "tla48KisoBfXSlcpuWaFNzvKs85sjMp0";
-  const trendingURl = `http://api.giphy.com/v1/gifs/trending?api_key=${giphyApiKey}`;
+  const trendingURl = `http://api.giphy.com/v1/gifs/trending?api_key=${giphyApiKey}&limit=112`;
   const randomURL = `http://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}`;
 
   // useState variables
@@ -22,9 +22,6 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [gifPerPage, setGifPerPage] = useState(28);
   const [currentItems, setCurrentItems] = useState([]);
-
-  //const lastGifIndex = currentPage * gifPerPage;
-  //const firstGifIndex = lastGifIndex - gifPerPage;
 
   const trendingGiphy = async () => {
     setIsLoading(true);
@@ -62,7 +59,7 @@ function App() {
   const searchGif = async (termToSearch) => {
     setSearchTerm(termToSearch); //this is just to be save in case the user wants to filter results by language, and the api can be call again
     const formattedTermToSearch = encodeURIComponent(termToSearch);
-    const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}`;
+    const searchUrl = `http://api.giphy.com/v1/gifs/search?q=${formattedTermToSearch}&lang=${selectedLanguage}&api_key=${giphyApiKey}&limit=112`;
 
     setIsLoading(true);
     try {
@@ -101,7 +98,7 @@ function App() {
     } else if (searchGifsList.length > 0) {
       return searchGifsList.length;
     } else {
-      return 1;
+      return 0;
     }
   };
 
@@ -120,7 +117,7 @@ function App() {
     } else {
       setCurrentItems([]);
     }
-  }, [currentPage, searchGifsList, trandingGifsList]);
+  }, [currentPage, gifPerPage, searchGifsList, trandingGifsList]);
 
   if (isLoading) {
     const GifPlaceHolders = [];
@@ -215,10 +212,10 @@ function App() {
       />
       {currentItems.length > 0 && (
         <div className="gifs-containter">
-          {currentItems.map((gif) => {
+          {currentItems.map((gif, index) => {
             return (
               <GifCard
-                key={gif.id}
+                key={`${gif.id}_${index}`}
                 gifUrl={gif.url}
                 title={gif.title}
                 videoSrc={gif.images.preview.mp4}
@@ -228,10 +225,26 @@ function App() {
           })}
         </div>
       )}
-      {/* Rendering a list of  trending Gif if we get null or undefined nothings happends 
-      else if we get an object or anything else we can render the component with the data from the api and the list*/}
+      {randomGif.url && (
+        <div className="gifs-containter">
+          <GifCard
+            imageSrc={randomGif.images["480w_still"].url}
+            gifUrl={randomGif.url}
+            title={randomGif.title}
+            videoSrc={randomGif.images.preview.mp4}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
 
-      {/* {trandingGifsList.length > 0 && (
+export default App;
+
+/* Rendering a list of  trending Gif if we get null or undefined nothings happends 
+      else if we get an object or anything else we can render the component with the data from the api and the list*/
+
+/* {trandingGifsList.length > 0 && (
         <div className="gifs-containter">
           {trandingGifsList.map((trandingGif) => {
             return (
@@ -245,11 +258,11 @@ function App() {
             );
           })}
         </div>
-      )} */}
+      )} */
 
-      {/* Rendering a list of  search Gif if we get null or undefined nothings happends 
-      else if we get an object or anything else we can render the component with the data from the api and the list*/}
-      {/* {searchGifsList.length > 0 && (
+/* Rendering a list of  search Gif if we get null or undefined nothings happends 
+      else if we get an object or anything else we can render the component with the data from the api and the list*/
+/* {searchGifsList.length > 0 && (
         <div className="gifs-containter">
           {searchGifsList.map((searchGifs) => {
             return (
@@ -264,23 +277,7 @@ function App() {
             );
           })}
         </div>
-      )} */}
+      )} */
 
-      {/* Rendering single Random Gif if we get null or undefined nothings happends 
-      else if we get a string or anything else we can render the component with the data from the api */}
-      {randomGif.url && (
-        <div className="gifs-containter">
-          <GifCard
-            imageSrc={randomGif.images["480w_still"].url}
-            gifUrl={randomGif.url}
-            title={randomGif.title}
-            videoSrc={randomGif.images.preview.mp4}
-            //imageSrc={trandingGif.images.preview_gif.url}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default App;
+/* Rendering single Random Gif if we get null or undefined nothings happends 
+      else if we get a string or anything else we can render the component with the data from the api */
