@@ -142,3 +142,49 @@ body {
   background-color: #61dafb;
   color: #282c34;
 }
+
+/* Header */
+header {
+  background-color: #282c34;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header button {
+  background-color: #282c34;
+  color: #61dafb;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+header .search-bar {
+  padding: 4px 0;
+  width: 300px;
+}
+
+header button:hover,
+header .search-button {
+  background-color: #61dafb;
+  color: #282c34;
+}
+
+header select {
+  background-color: #282c34;
+  color: #61dafb;
+  border: none;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+header select:hover {
+  background-color: #61dafb;
+  color: #282c34;
+}
+
+header option {
+  background-color: #282c34;
+  color: #61dafb;
+}

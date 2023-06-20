@@ -16,8 +16,15 @@ const SearchField = (props) => {
 
   return (
     <form action="" onSubmit={handleSearch}>
-      <input type="text" onChange={handleTermChange} />
-      <button type="submit">Search</button>
+      <input
+        type="text"
+        onChange={handleTermChange}
+        className="search-bar"
+        placeholder="Search for a GIF..."
+      />
+      <button type="submit" className="search-button">
+        Search
+      </button>
     </form>
   );
 };
