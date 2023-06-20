@@ -115,7 +115,7 @@ body {
 .page-navigation-nav {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .page-navigation-ul {
@@ -190,4 +190,18 @@ header select:hover {
 header option {
   background-color: #282c34;
   color: #61dafb;
+}
+
+/* div-note  for message to the user*/
+.note {
+  /* background-color: #61dafb; */
+  padding: 15px 10px;
+  border: 1px solid #61dafb;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 10px auto 0;
+}
+.note p {
+  color: #61dafb;
+  margin: 0;
 }

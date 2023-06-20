@@ -190,6 +190,12 @@ function App() {
             <option value="hi">Hindi</option>
           </select>
         </header>
+        <div className="note">
+          <p>
+            For website performance when you hover over an individual gif, the
+            preview start playing.
+          </p>
+        </div>
         <Paginantion
           currentPage={currentPage}
           gifPerPage={gifPerPage}
@@ -235,7 +241,12 @@ function App() {
           <option value="hi">Hindi</option>
         </select>
       </header>
-
+      <div className="note">
+        <p>
+          For website performance when you hover over an individual gif, the
+          preview start playing.
+        </p>
+      </div>
       <Paginantion
         currentPage={currentPage}
         gifPerPage={gifPerPage}
