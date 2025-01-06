@@ -1,6 +1,6 @@
 # Giphy API Project
 
-This is a simple server for a restaurant application, implementing basic CRUD operations.
+This is a React application that leverages the Giphy API to fetch and display GIFs dynamically.
 <div align="center">
   <img width="740" alt="Screenshot 2025-01-03 at 12 09 44 AM" src="https://github.com/user-attachments/assets/dce2999a-6c04-463a-ac46-568add4866eb" />
   <img width="740" alt="Screenshot 2025-01-03 at 12 10 51 AM" src="https://github.com/user-attachments/assets/d456597e-d822-4013-83ae-805ce859e74e" />
